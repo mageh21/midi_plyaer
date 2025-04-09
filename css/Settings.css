@@ -21,9 +21,30 @@
 .settingsTabButton {
 	flex: 1 1 auto;
 	height: 2em;
-	padding: 0.5em;
+	padding: 0.6em 1em;
 	box-sizing: border-box;
+	border: none;
+	border-bottom: 2px solid transparent;
+	background-color: var(--innerMenuBgColor);
+	color: var(--fontColor);
+	font-size: 0.9em;
+	text-align: center;
+	cursor: pointer;
+	transition: background-color 0.15s ease-out, border-color 0.15s ease-out, color 0.15s ease-out;
+	border-radius: 0;
 }
+
+.settingsTabButton:hover {
+	background-color: var(--lightInnerMenuHoverBgColor);
+	color: var(--buttonHoverFontColor);
+}
+
+.settingsTabButton.selected {
+	background-color: var(--innerMenuBgColor);
+	color: var(--fontWeightedColor);
+	border-bottom-color: var(--accentColor);
+}
+
 .settingsContentContainer {
 	height: 100%;
 	overflow-y: hidden;
@@ -40,28 +61,28 @@
 	margin: 1.5em;
 }
 .settingsGroupContainer {
-	border-top: 2px solid var(--borderColor);
+	border-top: 1px solid var(--borderColor);
+	padding-top: 0.8em;
+	margin-bottom: 0.8em;
 }
 
 .settingsGroupContainer:first-of-type {
-	border-top: 0px solid black;
+	border-top: none;
+	padding-top: 0;
 }
 .settingsGroupLabel {
-	font-size: 1em;
-	padding-left: 0.5em;
-	padding-top: 0.5em;
-	padding-bottom: 0.5em;
-	color: var(--fontColor);
+	font-size: 0.9em;
+	font-weight: 600;
+	padding-left: 0.8em;
+	padding-bottom: 0.6em;
+	color: var(--fontWeightedColor);
 }
 .settingContainer {
-	padding-top: 0.5em;
-	padding-bottom: 0.5em;
-	padding-left: 1em;
-	padding-right: 1em;
+	padding: 0.8em 1em;
 	width: 100%;
 	box-sizing: border-box;
 	background-color: var(--innerMenuBgColor);
-	transition: 0.2s all ease-out;
+	transition: background-color 0.15s ease-out;
 }
 .settingContainer:hover {
 	background-color: var(--lightInnerMenuHoverBgColor);
