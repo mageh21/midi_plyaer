@@ -1,4 +1,5 @@
 import { Factory } from 'vexflow';
+import { CONST } from "../data/CONST.js"; // Import CONST for MIDI_NOTE_TO_KEY
 
 export class SheetMusicRender {
     constructor(containerId) {
@@ -35,31 +36,78 @@ export class SheetMusicRender {
         console.log("VexFlow initialized for sheet music.");
     }
 
-    render(songData) {
-        if (!this.vf || !songData) {
-            // console.warn("SheetMusicRender not initialized or no song data.");
+    render(songData, currentTime) {
+        if (!this.vf || !songData || currentTime === undefined) {
             return; 
         }
 
-        // --- This is where the complex logic goes --- 
-        // 1. Clear previous notes
-        this.context.clear(); // Clear the canvas
-        this.stave.draw(); // Redraw the stave 
+        this.context.clear(); 
+        this.stave.draw();
 
-        // 2. Get notes relevant to the current view/time
-        //    (Requires parsing songData.notes, considering time, etc.)
-        
-        // 3. Convert MIDI notes to VexFlow format (keys, duration, accidentals)
-        //    Example: MIDI note 60 -> "c/4", duration might need calculation
-        
-        // --- REMOVED EXAMPLE NOTE DRAWING LOGIC ---
-        // const notes = [ ... ]; 
-        // if (notes.length > 0) { ... }
-        // --- END REMOVED LOGIC ---
+        // --- Basic Note Conversion (Pitch only, Fixed Duration) ---
+        const notesToDraw = [];
+        const timeWindowStart = currentTime; // Show notes starting around current time
+        const timeWindowEnd = currentTime + 4; // Look ahead a few seconds (adjust as needed)
+        const defaultDuration = "q"; // Draw all as quarter notes for now
 
-        console.log("Sheet music render called (no notes drawn yet).");
-        
-        // --- End complex logic section --- 
+        // Crude way to get notes in window (needs improvement)
+        const notesInWindow = songData.getNotes(timeWindowStart, timeWindowEnd) || [];
+        // Alternative if getNotesInTimeWindow doesn't exist:
+        // Iterate through songData.notesBySeconds or songData.getNoteSequence()
+
+        notesInWindow.forEach(note => {
+            const key = this.midiNoteToVexflowKey(note.noteNumber);
+            if (key) {
+                try {
+                     // Basic note creation - ignores actual duration, ties, beams, etc.
+                    const vfNote = this.vf.StaveNote({
+                        keys: [key],
+                        duration: defaultDuration
+                    });
+                    // Add accidental if needed (basic check)
+                    if (key.includes("#") || key.includes("b")) {
+                        const accidentalType = key.includes("#") ? "#" : "b";
+                        vfNote.addAccidental(0, this.vf.Accidental({ type: accidentalType }));
+                    }
+                    notesToDraw.push(vfNote);
+                } catch (e) {
+                    console.warn("VexFlow error creating note:", key, e);
+                }
+            }
+        });
+
+        // --- Format and Draw --- 
+        if (notesToDraw.length > 0) {
+             try {
+                // Attempt to format and draw - might fail if durations don't fit measure
+                const voice = this.vf.Voice({ num_beats: 4, beat_value: 4 }); // Assume 4/4
+                voice.setStrict(false); // Allow potentially overflowing measures for now
+                voice.addTickables(notesToDraw);
+                
+                this.vf.Formatter.FormatAndJustify([voice], this.stave.width - 50); // Leave some padding
+                
+                voice.draw(this.context, this.stave);
+            } catch(e) {
+                console.error("VexFlow formatting/drawing error:", e)
+                // Clear notes if formatting fails badly
+                this.context.clear(); 
+                this.stave.draw();
+            }
+        }
+        // --- End Note Conversion ---
+    }
+
+    // Helper function to convert MIDI note number to VexFlow key string
+    midiNoteToVexflowKey(noteNumber) {
+        const keyData = CONST.MIDI_NOTE_TO_KEY[noteNumber + 21]; // +21 seems to be offset used elsewhere
+        if (!keyData) return null;
+
+        const noteName = keyData.slice(0, -1); // e.g., "C#"
+        const octave = keyData.slice(-1);
+
+        let vexKey = noteName.toLowerCase().replace("#", "#") + "/" + octave;
+        // VexFlow expects flats as 'b', sharps as '#' already correct
+        return vexKey;
     }
 
     resize(width) {
