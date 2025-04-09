@@ -161,7 +161,8 @@ export class PianoRender {
 		}
 		// }.bind(this)
 
-		//velvet
+		//velvet - Commented out for modern look
+		/*
 		ctxWhite.strokeStyle = "rgba(155,50,50,1)"
 		ctxWhite.shadowColor = "rgba(155,50,50,1)"
 		ctxWhite.shadowOffsetY = 2
@@ -174,6 +175,7 @@ export class PianoRender {
 		ctxWhite.stroke()
 		ctxWhite.shadowColor = "rgba(0,0,0,0)"
 		ctxWhite.shadowBlur = 0
+		*/
 	}
 
 	drawWhiteKeys(ctxWhite) {
@@ -253,21 +255,43 @@ export class PianoRender {
 	 * @param {Dimensions} dims
 	 */
 	drawWhiteKey(ctx, dims, color) {
-		let radius = Math.ceil(this.renderDimensions.whiteKeyWidth / 20)
-		let x = dims.x
-		let y = Math.floor(dims.y) + 6
-		let height = Math.floor(dims.h) - 8
-		let width = dims.w
+		const { x, y, w, h } = dims
+		const borderRadius = Math.min(w * 0.05, 5); // Small radius
 
-		this.getWhiteKeyPath(ctx, x, y, width, height, radius)
+		// Simplified Drawing
+		ctx.fillStyle = color || "#FFFFFF"; // Solid white or provided color
+		ctx.strokeStyle = "#CCCCCC"; // Light grey border
+		ctx.lineWidth = 1;
 
-		ctx.fillStyle = color
+		// Draw rounded rectangle path
+		ctx.beginPath();
+		ctx.moveTo(x + borderRadius, y);
+		ctx.lineTo(x + w - borderRadius, y);
+		ctx.arcTo(x + w, y, x + w, y + borderRadius, borderRadius);
+		ctx.lineTo(x + w, y + h - borderRadius);
+		ctx.arcTo(x + w, y + h, x + w - borderRadius, y + h, borderRadius);
+		ctx.lineTo(x + borderRadius, y + h);
+		ctx.arcTo(x, y + h, x, y + h - borderRadius, borderRadius);
+		ctx.lineTo(x, y + borderRadius);
+		ctx.arcTo(x, y, x + borderRadius, y, borderRadius);
+		ctx.closePath();
+		
+		ctx.fill();
+		ctx.stroke();
+
+		// Comment out old gradient/stroke logic
+		/*
+		//shadow
+		// ctx.shadowColor = "rgba(0,0,0,0.3)"
+		// ctx.shadowOffsetY = 1
+		// ctx.shadowBlur = 2
+		ctx.fillStyle = this.getKeyGradient(ctx, dims)
+		ctx.strokeStyle = "black"
+		ctx.lineWidth = 1
+		this.getWhiteKeyPath(ctx, dims.x, dims.y, dims.w, dims.h, 2)
+		ctx.stroke()
 		ctx.fill()
-
-		ctx.fillStyle = this.getKeyGradient(ctx)
-		ctx.fill()
-
-		ctx.closePath()
+		*/
 	}
 	getKeyGradient(ctx) {
 		if (this.keyGradient == null) {
@@ -323,23 +347,55 @@ export class PianoRender {
 	 * @param {Dimensions} dims
 	 */
 	drawBlackKey(ctx, dims, color, noShadow) {
-		let radiusTop = 0 //this.renderDimensions.blackKeyWidth / 15
-		let radiusBottom = this.renderDimensions.blackKeyWidth / 8
-		let x = dims.x
-		let y = dims.y + 6
-		let height = dims.h
-		let width = dims.w
-		color = color || "black"
+		const { x, y, w, h } = dims;
+		const borderRadius = Math.min(w * 0.1, 4); // Small radius
 
-		this.getBlackKeyPath(ctx, x, y, radiusTop, width, height, radiusBottom)
+		// Simplified Drawing
+		ctx.fillStyle = color || "#444444"; // Solid dark grey or provided color
+		ctx.strokeStyle = "#666666"; // Slightly lighter border
+		ctx.lineWidth = 1;
 
+		// Draw rounded rectangle path
+		ctx.beginPath();
+		ctx.moveTo(x + borderRadius, y);
+		ctx.lineTo(x + w - borderRadius, y);
+		ctx.arcTo(x + w, y, x + w, y + borderRadius, borderRadius);
+		ctx.lineTo(x + w, y + h - borderRadius);
+		ctx.arcTo(x + w, y + h, x + w - borderRadius, y + h, borderRadius);
+		ctx.lineTo(x + borderRadius, y + h);
+		ctx.arcTo(x, y + h, x, y + h - borderRadius, borderRadius);
+		ctx.lineTo(x, y + borderRadius);
+		ctx.arcTo(x, y, x + borderRadius, y, borderRadius);
+		ctx.closePath();
+
+		ctx.fill();
+		ctx.stroke();
+
+		// Comment out old shadow/SVG logic
+		/*
+		let radiusTop = this.renderDimensions.blackKeyWidth / 10
+		let radiusBottom = radiusTop
+
+		if (!noShadow) {
+			ctx.shadowColor = "rgba(0,0,0,0.5)"
+			ctx.shadowOffsetY = 2
+			ctx.shadowBlur = 3
+		}
+		this.getBlackKeyPath(
+			ctx,
+			dims.x,
+			dims.y,
+			radiusTop,
+			dims.w,
+			dims.h,
+			radiusBottom
+		)
 		ctx.fillStyle = color
 		ctx.fill()
-		if (!noShadow) {
-			ctx.fillStyle = this.getKeyGradient()
-			ctx.fill()
-		}
-		ctx.closePath()
+
+		ctx.shadowOffsetY = 0
+		ctx.shadowBlur = 0
+		*/
 	}
 	strokeBlackKey(dims, color) {
 		let radiusTop = 0 //this.renderDimensions.blackKeyWidth / 15
