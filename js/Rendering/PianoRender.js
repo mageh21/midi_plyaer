@@ -204,44 +204,52 @@ export class PianoRender {
 		}
 	}
 	drawWhiteKeyNames(ctx) {
-		ctx.fillStyle = "black"
-		const fontSize = this.renderDimensions.whiteKeyWidth / 2.2
-		ctx.font = fontSize + "px Arial black"
+		ctx.fillStyle = "black";
+		const fontSize = this.renderDimensions.whiteKeyWidth / 2.2;
+		ctx.font = `bold ${fontSize}px Arial`; // Use bold instead of black
+		ctx.textAlign = "center";
+		ctx.textBaseline = "bottom"; // Align text baseline to bottom
 		for (
 			let i = Math.max(0, this.renderDimensions.minNoteNumber);
 			i <= this.renderDimensions.maxNoteNumber;
 			i++
 		) {
-			let dims = this.renderDimensions.getKeyDimensions(i)
+			let dims = this.renderDimensions.getKeyDimensions(i);
 			if (!isBlack(i)) {
-				let txt = this.getDisplayKey(CONST.MIDI_NOTE_TO_KEY[i + 21] || "")
-				let txtWd = ctx.measureText(txt).width
+				let txt = this.getDisplayKey(CONST.MIDI_NOTE_TO_KEY[i + 21] || "");
+				let txtWd = ctx.measureText(txt).width;
 				ctx.fillText(
 					txt,
-					dims.x + dims.w / 2 - txtWd / 2,
-					this.renderDimensions.whiteKeyHeight - fontSize / 3
-				)
+					dims.x + dims.w / 2,
+					dims.y + this.renderDimensions.whiteKeyHeight - 5 // Position slightly up from bottom
+				);
 			}
 		}
 	}
 	drawBlackKeyNames(ctx) {
-		ctx.fillStyle = "white"
-		const fontSize = this.renderDimensions.blackKeyWidth / 2.1
-		ctx.font = Math.ceil(fontSize) + "px Arial black"
+		ctx.fillStyle = "white"; // Main text color
+		ctx.strokeStyle = "black"; // Outline color
+		ctx.lineWidth = 1.5; // Outline thickness (adjust as needed)
+		const fontSize = this.renderDimensions.blackKeyWidth / 2.1;
+		ctx.font = `bold ${Math.ceil(fontSize)}px Arial`; // Use bold instead of black
+		ctx.textAlign = "center";
+		ctx.textBaseline = "bottom"; // Align text baseline to bottom
+
 		for (
 			let i = Math.max(0, this.renderDimensions.minNoteNumber);
 			i <= this.renderDimensions.maxNoteNumber;
 			i++
 		) {
-			let dims = this.renderDimensions.getKeyDimensions(i)
+			let dims = this.renderDimensions.getKeyDimensions(i);
 			if (isBlack(i)) {
-				let txt = this.getDisplayKey(CONST.MIDI_NOTE_TO_KEY[i + 21] || "")
-				let txtWd = ctx.measureText(txt).width
-				ctx.fillText(
-					txt,
-					dims.x + dims.w / 2 - txtWd / 2,
-					this.renderDimensions.blackKeyHeight - 2
-				)
+				let txt = this.getDisplayKey(CONST.MIDI_NOTE_TO_KEY[i + 21] || "");
+				let txtWd = ctx.measureText(txt).width;
+				let xPos = dims.x + dims.w / 2;
+				let yPos = dims.y + this.renderDimensions.blackKeyHeight - 3; // Position slightly up from bottom
+
+				// Draw outline then fill
+				ctx.strokeText(txt, xPos, yPos);
+				ctx.fillText(txt, xPos, yPos);
 			}
 		}
 	}
