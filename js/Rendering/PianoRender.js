@@ -227,13 +227,15 @@ export class PianoRender {
 		}
 	}
 	drawBlackKeyNames(ctx) {
-		ctx.fillStyle = "white"; // Main text color
-		ctx.strokeStyle = "black"; // Outline color
-		ctx.lineWidth = 1.5; // Outline thickness (adjust as needed)
-		const fontSize = this.renderDimensions.blackKeyWidth / 2.1;
-		ctx.font = `bold ${Math.ceil(fontSize)}px Arial`; // Use bold instead of black
+		const fontSize = this.renderDimensions.blackKeyWidth / 2.0; // Slightly larger perhaps
+		ctx.font = `normal ${Math.ceil(fontSize)}px Arial`; // Normal weight
 		ctx.textAlign = "center";
-		ctx.textBaseline = "bottom"; // Align text baseline to bottom
+		ctx.textBaseline = "middle"; // Center vertically
+
+		const plateFillColor = "rgba(255, 255, 255, 0.75)"; // Semi-transparent white plate
+		const textColor = "#000000"; // Black text for contrast on plate
+		const platePadding = fontSize * 0.2; // Padding around text
+		const plateRadius = 2; // Rounded corners for the plate
 
 		for (
 			let i = Math.max(0, this.renderDimensions.minNoteNumber);
@@ -243,13 +245,34 @@ export class PianoRender {
 			let dims = this.renderDimensions.getKeyDimensions(i);
 			if (isBlack(i)) {
 				let txt = this.getDisplayKey(CONST.MIDI_NOTE_TO_KEY[i + 21] || "");
-				let txtWd = ctx.measureText(txt).width;
-				let xPos = dims.x + dims.w / 2;
-				let yPos = dims.y + this.renderDimensions.blackKeyHeight - 3; // Position slightly up from bottom
+				let txtMetrics = ctx.measureText(txt);
+				let txtWd = txtMetrics.width;
+				let txtHt = fontSize; // Approximate height
 
-				// Draw outline then fill
-				ctx.strokeText(txt, xPos, yPos);
-				ctx.fillText(txt, xPos, yPos);
+				// Plate dimensions
+				let plateW = txtWd + platePadding * 2;
+				let plateH = txtHt + platePadding * 2;
+				let plateX = dims.x + dims.w / 2 - plateW / 2;
+				let plateY = dims.y + this.renderDimensions.blackKeyHeight * 0.8 - plateH / 2; // Position lower middle
+
+				// Draw background plate
+				ctx.fillStyle = plateFillColor;
+				ctx.beginPath();
+				ctx.moveTo(plateX + plateRadius, plateY);
+				ctx.lineTo(plateX + plateW - plateRadius, plateY);
+				ctx.arcTo(plateX + plateW, plateY, plateX + plateW, plateY + plateRadius, plateRadius);
+				ctx.lineTo(plateX + plateW, plateY + plateH - plateRadius);
+				ctx.arcTo(plateX + plateW, plateY + plateH, plateX + plateW - plateRadius, plateY + plateH, plateRadius);
+				ctx.lineTo(plateX + plateRadius, plateY + plateH);
+				ctx.arcTo(plateX, plateY + plateH, plateX, plateY + plateH - plateRadius, plateRadius);
+				ctx.lineTo(plateX, plateY + plateRadius);
+				ctx.arcTo(plateX, plateY, plateX + plateRadius, plateY, plateRadius);
+				ctx.closePath();
+				ctx.fill();
+
+				// Draw text on top of plate
+				ctx.fillStyle = textColor;
+				ctx.fillText(txt, dims.x + dims.w / 2, plateY + plateH / 2);
 			}
 		}
 	}
