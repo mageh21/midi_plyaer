@@ -458,3 +458,15 @@ canvas {
 .panel-close-button:hover {
 	color: darkred !important; /* TEMP */
 }
+
+/* --- Sheet Music Container --- */
+#sheetMusicContainer {
+	width: 100%;
+	height: 220px; /* Initial height, match VexFlow height + padding */
+	padding: 10px;
+	box-sizing: border-box;
+	background-color: var(--innerMenuBgColor); /* Match theme bg */
+	border-top: 1px solid var(--borderColor);
+	overflow: hidden; /* Hide potential VexFlow overflow */
+	position: relative; /* For potential absolute positioning inside */
+}

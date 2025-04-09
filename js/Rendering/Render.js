@@ -14,6 +14,7 @@ import { isBlack } from "../Util.js"
 import { getTrackColor, isTrackDrawn } from "../player/Tracks.js"
 import { getPlayerState } from "../player/Player.js"
 import { InSongTextRenderer } from "./InSongTextRenderer.js"
+import { SheetMusicRender } from "./SheetMusicRender.js"
 
 const DEBUG = true
 
@@ -28,13 +29,14 @@ const PROGRESS_BAR_CANVAS_HEIGHT = 20
 export class Render {
 	constructor() {
 		this.renderDimensions = new RenderDimensions()
-		this.renderDimensions.registerResizeCallback(this.setupCanvases.bind(this))
+		this.renderDimensions.registerResizeCallback(this.onResize.bind(this))
 
 		setSettingCallback("particleBlur", this.setCtxBlur.bind(this))
 
 		this.setupCanvases()
 
 		this.pianoRender = new PianoRender(this.renderDimensions)
+		this.sheetMusicRender = new SheetMusicRender("sheetMusicContainer")
 
 		this.overlayRender = new OverlayRender(this.ctx, this.renderDimensions)
 		// this.addStartingOverlayMessage()
@@ -75,6 +77,8 @@ export class Render {
 
 		this.showKeyNamesOnPianoWhite = getSetting("showKeyNamesOnPianoWhite")
 		this.showKeyNamesOnPianoBlack = getSetting("showKeyNamesOnPianoBlack")
+
+		this.sheetMusicRender.init()
 	}
 
 	setCtxBlur() {
@@ -154,6 +158,8 @@ export class Render {
 			)
 			this.markerRender.render(time, playerState.song.markers)
 			this.inSongTextRender.render(time, playerState.song.markers)
+
+			this.sheetMusicRender.render(playerState.song)
 		}
 
 		this.overlayRender.render()
@@ -439,5 +445,11 @@ export class Render {
 		this.pianoRender.repositionCanvases()
 		this.getProgressBarCanvas().style.top = menuHeight + "px"
 		this.noteRender.setMenuHeight(menuHeight)
+	}
+
+	onResize() {
+		this.setupCanvases()
+		this.pianoRender.resize()
+		this.sheetMusicRender.resize(this.renderDimensions.windowWidth)
 	}
 }

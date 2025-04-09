@@ -241,6 +241,7 @@ export class UI {
 		div.classList.add("unhidden")
 	}
 	hideSettings() {
+		console.log("hideSettings() called"); // DEBUG LOG
 		DomHelper.removeClass("selected", this.getSettingsButton())
 		this.settingsShown = false
 		this.hideDiv(this.getSettingsDiv())
@@ -265,7 +266,10 @@ export class UI {
 				innerHTML: "&times;", // 'X' symbol
 				title: "Close Settings"
 			});
-			closeButton.addEventListener("click", () => this.hideSettings());
+			closeButton.addEventListener("click", () => {
+				console.log("Close button clicked!"); // DEBUG LOG
+				this.hideSettings();
+			});
 			this.settingsDiv.appendChild(closeButton);
 			// --- End Close Button ---
 		}

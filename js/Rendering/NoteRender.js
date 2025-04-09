@@ -326,37 +326,36 @@ export class NoteRender {
 		})
 	}
 	drawNote(renderInfos) {
-		let ctx = this.ctx
+		this.doNotePath(renderInfos)
+		this.ctx.fill()
+		this.strokeActiveAndOthers(renderInfos)
 
-		if (renderInfos.w <= 0 || renderInfos.h <= 0) {
-			return
-		}
+		// --- Add Note Name Text --- 
+		if (getSetting("showFallingNoteNames")) { // Optional: Add a setting later
+			const noteName = this.getDisplayNoteName(renderInfos.noteNumber);
+			if (noteName) {
+				const fontSize = Math.min(renderInfos.w * 0.6, 12); // Adjust size based on width
+				this.ctx.font = `${fontSize}px Arial`;
+				this.ctx.textAlign = "center";
+				this.ctx.textBaseline = "top";
 
-		let fadeInAlpha = 1
-		if (getSetting("fadeInNotes")) {
-			fadeInAlpha = this.getAlphaFromY(renderInfos.y + renderInfos.h)
-		}
-
-		ctx.globalAlpha = fadeInAlpha
-
-		if (renderInfos.noteDoneRatio < 1) {
-			this.drawNoteBefore(renderInfos)
-			ctx.fill()
-			if (!renderInfos.isOn && getSetting("strokeNotes")) {
-				ctx.stroke()
+				// Choose contrasting text color (simple example)
+				const avgColorVal = this.getAverageColorValue(renderInfos.fillStyle);
+				this.ctx.fillStyle = avgColorVal > 128 ? "#000000" : "#FFFFFF"; 
+				
+				// Calculate position (near top-center of the note rectangle)
+				const textX = renderInfos.x + renderInfos.w / 2;
+				const textY = renderInfos.y + fontSize * 0.5; // Add small top margin
+				
+				// Only draw if note is tall enough
+				if (renderInfos.h > fontSize * 1.5) { 
+					this.ctx.fillText(noteName, textX, textY);
+				}
 			}
 		}
-
-		if (getSetting("pianoPosition") != 0 && renderInfos.noteDoneRatio > 0) {
-			this.drawNoteAfter(renderInfos)
-			ctx.fill()
-			if (!renderInfos.isOn && getSetting("strokeNotes")) {
-				ctx.stroke()
-			}
-		}
-
-		ctx.globalAlpha = 1
+		// --- End Note Name Text ---
 	}
+
 	drawNoteAfter(renderInfos) {
 		let y =
 			renderInfos.y +
@@ -485,5 +484,34 @@ export class NoteRender {
 	 */
 	setMenuHeight(menuHeight) {
 		this.menuHeight = menuHeight
+	}
+
+	// --- Helper function to get note name ---
+	getDisplayNoteName(noteNumber) {
+		const key = CONST.MIDI_NOTE_TO_KEY[noteNumber + 21] || "";
+		// Optional: Simplify name (e.g., remove octave number)
+		// return key.replace(/[0-9]/g, ""); 
+		return key;
+	}
+
+	// --- Helper function to determine contrast color ---
+	getAverageColorValue(colorString) {
+		try {
+			// Simple check for named colors or basic hex
+			if (colorString === 'white' || colorString === '#FFFFFF' || colorString === '#FFF') return 255;
+			if (colorString === 'black' || colorString === '#000000' || colorString === '#000') return 0;
+
+			// Basic check for rgba(r,g,b,a)
+			if (colorString.startsWith('rgba')) {
+				const parts = colorString.match(/\d+/g);
+				if (parts && parts.length >= 3) {
+					return (parseInt(parts[0]) + parseInt(parts[1]) + parseInt(parts[2])) / 3;
+				}
+			}
+			// Add more robust color parsing if needed (hex, hsl, etc.)
+		} catch (e) {
+			console.warn("Could not parse color for contrast:", colorString);
+		}
+		return 128; // Default if parsing fails
 	}
 }
