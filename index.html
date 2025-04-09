@@ -57,7 +57,8 @@
 	<script type="module" src="js/InputListeners.js"></script> -->
 	
 	
-	<script type="module" src="js/main.js" type="text/javascript"></script>
+	<!-- Comment out the original main module script -->
+	<!-- <script type="module" src="js/main.js" type="text/javascript"></script> -->
 	
 	<style data="dynSliderStyle" type="text/css"></style>
 	
@@ -68,5 +69,9 @@
 
 </head>
 <body>
+
+<!-- Load the bundled script at the end of the body -->
+<script src="dist/bundle.js"></script>
+
 </body>
 </html>
