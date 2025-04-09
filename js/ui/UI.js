@@ -253,14 +253,23 @@ export class UI {
 	}
 	getSettingsDiv() {
 		if (!this.settingsDiv) {
-			this.settingsDiv = DomHelper.createDivWithIdAndClass(
+			this.settingsDiv = DomHelper.createElementWithIdAndClass(
 				"settingsDiv",
-				"innerMenuDiv"
-			)
-			this.hideDiv(this.settingsDiv)
-			this.settingsDiv.appendChild(this.getSettingsContent())
+				"innerMenuDiv hidden"
+			);
+			this.settingsDiv.appendChild(this.getSettingsContent());
+
+			// --- Create and Add Close Button ---
+			const closeButton = DomHelper.createElement("button", {
+				className: "panel-close-button",
+				innerHTML: "&times;", // 'X' symbol
+				title: "Close Settings"
+			});
+			closeButton.addEventListener("click", () => this.hideSettings());
+			this.settingsDiv.appendChild(closeButton);
+			// --- End Close Button ---
 		}
-		return this.settingsDiv
+		return this.settingsDiv;
 	}
 	getSettingsContent() {
 		return getSettingsDiv()

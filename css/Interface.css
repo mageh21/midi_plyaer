@@ -438,3 +438,22 @@ canvas {
 
 	/* Add other rules for small screens here */
 }
+
+/* --- Panel Close Button --- */
+.panel-close-button {
+	position: absolute;
+	top: 8px;
+	right: 10px;
+	background: none;
+	border: none;
+	font-size: 1.8em;
+	font-weight: bold;
+	color: var(--fontWeakenedColor);
+	cursor: pointer;
+	padding: 0 5px;
+	line-height: 1;
+	transition: color 0.15s ease-out;
+}
+.panel-close-button:hover {
+	color: var(--fontColor);
+}
