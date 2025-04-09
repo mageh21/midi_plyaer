@@ -1,3 +1,11 @@
+// Import CSS files for Webpack to bundle
+import '../css/bootstrap.min.css';
+import '../css/bootstrap-theme.min.css';
+import '../css/nano.min.css'; // pickr theme
+import '../css/Interface.css';
+import '../css/Inputs.css';
+import '../css/Settings.css';
+
 import { Render } from "./Rendering/Render.js"
 import { UI } from "./ui/UI.js"
 import { InputListeners } from "./InputListeners.js"

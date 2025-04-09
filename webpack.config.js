@@ -10,15 +10,16 @@ module.exports = {
   mode: 'production', // Enable production optimizations (like minification)
   devtool: 'source-map', // Generate source maps for easier debugging
   // Add module rules for loaders (e.g., CSS, images) here later if needed
-  // module: {
-  //   rules: [
-  //     // Example: CSS Loader
-  //     // {
-  //     //   test: /\.css$/i,
-  //     //   use: ['style-loader', 'css-loader'],
-  //     // },
-  //   ],
-  // },
+  module: {
+    rules: [
+      // Add CSS Loader rule
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'], // Injects CSS into the DOM via <style> tags
+      },
+      // Add other loaders here if needed (e.g., for images, fonts)
+    ],
+  },
   // Add plugins here later if needed
   // plugins: [],
 }; 

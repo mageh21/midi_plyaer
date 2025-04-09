@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/Bewelge/MIDIano#readme",
   "devDependencies": {
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0",
     "webpack": "^5.99.5",
     "webpack-cli": "^6.0.1"
   }
