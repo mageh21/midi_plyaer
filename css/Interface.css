@@ -1,33 +1,24 @@
 :root {
-	/* Old Color Scheme
-	--bgColor: rgba(205, 205, 205, 1);
-	--innerMenuBgColor: rgba(225, 225, 225, 1);
-	--sliderBgColor: rgba(245, 245, 245, 1);
-	--fontColor: rgba(25, 25, 25, 1);
-	--buttonFontColor: #424242;
-	--buttonBgColor: #9e9e9e;
-	--buttonActiveBgColor: #d3d3d3;
-	--buttonHoverBgColor: #c9c9c9;
-	--borderColor: rgba(0, 0, 0, 0.5); */
+	/* Modernized Dark Theme */
+	--bgColor: #282c34; /* Darker background */
+	--innerMenuBgColor: #21252b; /* Slightly lighter menu bg */
+	--lightInnerMenuHoverBgColor: #3a3f4b; /* Hover state */
 
-	--bgColor: #424242;
-	--innerMenuBgColor: #424242;
-	--lightInnerMenuHoverBgColor: #4e4e4e;
+	--inputBgColor: #3a3f4b; /* Input background */
+	--inputFontColor: #abb2bf; /* Lighter input text */
 
-	--inputBgColor: #757575;
-	--inputFontColor: #eeeeee;
+	--fontColor: #abb2bf; /* Main text color */
+	--fontWeightedColor: #e6e6e6; /* Brighter text */
+	--fontWeakenedColor: #7f848e; /* Dimmer text */
 
-	--fontColor: #bdbdbd;
-	--fontWeightedColor: #d3d3d3;
-	--fontWeakenedColor: #8a8a8a;
+	--buttonFontColor: #e6e6e6; /* Button text */
+	--buttonBgColor: #3a3f4b; /* Button background */
+	--buttonActiveBgColor: #61dafb; /* Accent color for active/pressed */
+	--buttonHoverBgColor: #4b5263; /* Button hover */
+	--buttonHoverFontColor: #ffffff; /* Brighter hover text */
 
-	--buttonFontColor: #bdbdbd;
-	--buttonBgColor: #494949;
-	--buttonActiveBgColor: #757575;
-	--buttonHoverBgColor: #494949;
-	--buttonHoverFontColor: #dfdfdf;
-
-	--borderColor: #616161;
+	--borderColor: #21252b; /* Darker border, matching menu bg */
+	--accentColor: #61dafb; /* Primary accent color (e.g., for highlights, selections) */
 }
 
 html,
@@ -270,7 +261,7 @@ canvas {
 	position: relative;
 	box-sizing: border-box;
 
-	padding: 0.5em;
+	padding: 0.6em 1em; /* Slightly more padding */
 
 	text-align: center;
 	font-size: 1em;
@@ -280,24 +271,26 @@ canvas {
 	background-color: var(--buttonBgColor);
 
 	outline: none;
-	border-radius: 1px;
-	border: 1px solid rgba(0, 0, 0, 0);
+	border-radius: 4px; /* Add rounded corners */
+	border: 1px solid transparent; /* Use transparent border for consistent size */
 
 	transition: all 0.15s ease-out;
 
+	cursor: pointer; /* Ensure cursor changes */
 	-ms-user-select: none; /* Internet Explorer/Edge */
 	user-select: none;
 }
 .btn:hover:active {
 	background-color: var(--buttonActiveBgColor);
+	color: #1a1a1d; /* Darker text on active accent */
 }
 .btn:hover {
 	background-color: var(--buttonHoverBgColor);
 	color: var(--buttonHoverFontColor);
-	border: 1px solid var(--borderColor);
+	border-color: var(--buttonHoverBgColor); /* Make border match bg on hover */
 }
 .btn-select-line {
-	border-bottom: 4px solid #607d8b;
+	border-bottom: 4px solid var(--accentColor); /* Use accent color */
 	transition: all 0.15s ease-out;
 	position: absolute;
 	bottom: 0;
@@ -306,12 +299,10 @@ canvas {
 	opacity: 0;
 }
 .btn.selected {
+	background-color: var(--buttonHoverBgColor); /* Maintain hover style when selected */
+	color: var(--buttonHoverFontColor);
 	border-bottom-left-radius: 0px;
 	border-bottom-right-radius: 0px;
-}
-.btn.selected .btn-select-line {
-	opacity: 1;
-	width: 100%;
 }
 .btn-lg {
 	font-size: 1.5em;
