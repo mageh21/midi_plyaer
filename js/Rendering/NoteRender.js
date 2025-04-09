@@ -326,10 +326,87 @@ export class NoteRender {
 		})
 	}
 	drawNote(renderInfos) {
-		this.doNotePath(renderInfos)
-		this.ctx.fill()
-		this.strokeActiveAndOthers(renderInfos)
-
+		// Apply gradient fill based on note velocity
+		const intensity = renderInfos.velocity / 127; // Normalize velocity to 0-1
+		const ctx = this.ctx;
+		
+		// Save context for gradient
+		ctx.save();
+		
+		// Create gradient based on note color and velocity
+		const gradient = ctx.createLinearGradient(
+			renderInfos.x, 
+			renderInfos.y, 
+			renderInfos.x + renderInfos.w, 
+			renderInfos.y + renderInfos.h
+		);
+		
+		// Parse the current fill style to create the gradient
+		let baseColor = renderInfos.fillStyle;
+		
+		// Add stops to gradient
+		gradient.addColorStop(0, baseColor);
+		
+		// Create a lighter version of the color for the gradient
+		let lighterColor;
+		if (baseColor.startsWith('rgba')) {
+			// Extract RGBA values
+			const rgba = baseColor.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([.\d]+)\)/);
+			if (rgba) {
+				const r = Math.min(255, parseInt(rgba[1]) + 40);
+				const g = Math.min(255, parseInt(rgba[2]) + 40);
+				const b = Math.min(255, parseInt(rgba[3]) + 40);
+				lighterColor = `rgba(${r}, ${g}, ${b}, ${rgba[4]})`;
+			} else {
+				lighterColor = baseColor;
+			}
+		} else {
+			lighterColor = baseColor;
+		}
+		
+		gradient.addColorStop(1, lighterColor);
+		
+		// Apply gradient
+		ctx.fillStyle = gradient;
+		
+		// Draw the note with special effects
+		this.doNotePath(renderInfos);
+		ctx.fill();
+		
+		// Add highlight effect at the top of the note (for dimension)
+		if (renderInfos.h > 20) { // Only for notes tall enough
+			ctx.beginPath();
+			ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+			
+			// Draw rounded rectangle for highlight
+			const x = renderInfos.x + 2;
+			const y = renderInfos.y + 2;
+			const width = renderInfos.w - 4;
+			const height = Math.min(5, renderInfos.h * 0.2);
+			const radius = Math.min(renderInfos.rad - 1, 3);
+			
+			// Manual rounded rect path
+			ctx.beginPath();
+			ctx.moveTo(x + radius, y);
+			ctx.lineTo(x + width - radius, y);
+			ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+			ctx.lineTo(x + width, y + height - radius);
+			ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+			ctx.lineTo(x + radius, y + height);
+			ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+			ctx.lineTo(x, y + radius);
+			ctx.quadraticCurveTo(x, y, x + radius, y);
+			ctx.closePath();
+			
+			ctx.fill();
+		}
+		
+		// Apply stroke
+		this.strokeActiveAndOthers(renderInfos);
+		
+		// Restore context after gradient
+		ctx.restore();
+		
 		// --- Add Note Name Text --- 
 		if (getSetting("showFallingNoteNames")) { // Optional: Add a setting later
 			const noteName = this.getDisplayNoteName(renderInfos.noteNumber);
@@ -423,26 +500,29 @@ export class NoteRender {
 				overWriteParams[key] = renderInfo[key]
 			}
 		}
-		if (getSetting("roundedNotes") || getSetting("noteBorderRadius") > 0) {
-			drawRoundRect(
-				this.ctx,
-				overWriteParams.x,
-				overWriteParams.y,
-				overWriteParams.w,
-				overWriteParams.h,
-				overWriteParams.rad,
-				getSetting("roundedNotes")
-			)
-		} else {
-			this.ctx.beginPath()
-			this.ctx.rect(
-				overWriteParams.x,
-				overWriteParams.y,
-				overWriteParams.w,
-				overWriteParams.h
-			)
-			this.ctx.closePath()
-		}
+		
+		// Always use rounded corners for modern look
+		const radius = Math.max(overWriteParams.rad, getSetting("noteBorderRadius") || 10);
+		
+		// Add glow and shadow effects
+		this.ctx.shadowColor = renderInfo.fillStyle;
+		this.ctx.shadowBlur = 8;
+		this.ctx.shadowOffsetX = 0;
+		this.ctx.shadowOffsetY = 0;
+		
+		// Draw note with rounded corners
+		drawRoundRect(
+			this.ctx,
+			overWriteParams.x,
+			overWriteParams.y,
+			overWriteParams.w,
+			overWriteParams.h,
+			radius,
+			true
+		);
+		
+		// Reset shadow to avoid affecting other elements
+		this.ctx.shadowBlur = 0;
 	}
 
 	createNoteParticles(activeNotes, colWhite, colBlack) {
@@ -488,30 +568,36 @@ export class NoteRender {
 
 	// --- Helper function to get note name ---
 	getDisplayNoteName(noteNumber) {
-		const key = CONST.MIDI_NOTE_TO_KEY[noteNumber + 21] || "";
-		// Optional: Simplify name (e.g., remove octave number)
-		// return key.replace(/[0-9]/g, ""); 
-		return key;
+		const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+		if (noteNumber !== undefined) {
+			const octave = Math.floor(noteNumber / 12) - 1;
+			const note = noteNumber % 12;
+			return noteNames[note] + octave;
+		}
+		return '';
 	}
 
 	// --- Helper function to determine contrast color ---
-	getAverageColorValue(colorString) {
-		try {
-			// Simple check for named colors or basic hex
-			if (colorString === 'white' || colorString === '#FFFFFF' || colorString === '#FFF') return 255;
-			if (colorString === 'black' || colorString === '#000000' || colorString === '#000') return 0;
-
-			// Basic check for rgba(r,g,b,a)
-			if (colorString.startsWith('rgba')) {
-				const parts = colorString.match(/\d+/g);
-				if (parts && parts.length >= 3) {
-					return (parseInt(parts[0]) + parseInt(parts[1]) + parseInt(parts[2])) / 3;
-				}
+	getAverageColorValue(color) {
+		if (!color) return 128;
+		
+		// Handle rgba format
+		if (color.startsWith('rgba')) {
+			const rgba = color.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([.\d]+)\)/);
+			if (rgba) {
+				return (parseInt(rgba[1]) + parseInt(rgba[2]) + parseInt(rgba[3])) / 3;
 			}
-			// Add more robust color parsing if needed (hex, hsl, etc.)
-		} catch (e) {
-			console.warn("Could not parse color for contrast:", colorString);
 		}
-		return 128; // Default if parsing fails
+		
+		// Handle rgb format
+		if (color.startsWith('rgb')) {
+			const rgb = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+			if (rgb) {
+				return (parseInt(rgb[1]) + parseInt(rgb[2]) + parseInt(rgb[3])) / 3;
+			}
+		}
+		
+		// Default value
+		return 128;
 	}
 }

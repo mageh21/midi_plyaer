@@ -65,15 +65,16 @@ canvas {
 	z-index: -5;
 }
 #progressBarCanvas {
-	transition: all 0.4s ease-out;
-	background-color: var(--inputBgColor);
+	transition: all 0.3s ease-out;
+	background-color: transparent;
 	box-sizing: border-box;
 	left: 0px;
 	position: absolute;
-	border-bottom: 4px solid var(--borderColor);
+	border-bottom: none;
 	float: left;
 	cursor: pointer;
 	z-index: 10;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .row {
@@ -126,16 +127,16 @@ canvas {
 	background-image: var(--navBackground);
 	color: var(--buttonFontColor);
 	border-top: 1px solid var(--borderColor);
-	border-radius: 2px;
-	/* padding: 5px;
-	margin: 5px; */
+	border-radius: 4px;
 	box-sizing: border-box;
 	overflow: hidden;
-
+	margin-bottom: 6px;
 	transition: 0.3s all ease-out;
 }
 .innerMenuContDiv.collapsed {
-	max-height: 2em;
+	max-height: 2.5em;
+	overflow: hidden;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .clickableTitle:not(.glyphicon) {
 	position: relative;
@@ -147,11 +148,20 @@ canvas {
 	background-color: var(--lightInnerMenuHoverBgColor);
 }
 .collapserGlyphSpan {
-	font-size: 1em;
+	font-size: 1.1em;
 	position: absolute !important;
-	top: 0.5em !important;
-	height: 14px;
+	top: 0.4em !important;
+	height: 16px;
+	width: 16px;
 	right: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--accentColor);
+	color: var(--bgColor);
+	border-radius: 50%;
+	line-height: 1;
+	z-index: 10;
 }
 .centeredMenuDiv {
 	background-color: var(--bgColor);
@@ -442,31 +452,27 @@ canvas {
 /* --- Panel Close Button --- */
 .panel-close-button {
 	position: absolute;
-	top: 5px; /* Adjust for potential parent padding */
-	right: 5px; /* Adjust for potential parent padding */
-	background: yellow !important; /* TEMP: Force visibility */
-	color: red !important; /* TEMP: Force visibility */
-	border: 1px solid red !important; /* TEMP: Force visibility */
-	font-size: 1.5em; /* Slightly smaller */
+	top: 5px;
+	right: 5px;
+	background-color: var(--accentColor) !important;
+	color: var(--bgColor) !important;
+	border: none !important;
+	font-size: 1.3em;
 	font-weight: bold;
 	cursor: pointer;
-	padding: 0 8px; /* More padding */
-	line-height: 1;
-	z-index: 101; /* Ensure it's above other panel content */
-	transition: color 0.15s ease-out;
+	padding: 0 8px;
+	line-height: 1.2;
+	z-index: 101;
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.15s ease-out;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 .panel-close-button:hover {
-	color: darkred !important; /* TEMP */
-}
-
-/* --- Sheet Music Container --- */
-#sheetMusicContainer {
-	width: 100%;
-	height: 220px; /* Initial height, match VexFlow height + padding */
-	padding: 10px;
-	box-sizing: border-box;
-	background-color: var(--innerMenuBgColor); /* Match theme bg */
-	border-top: 1px solid var(--borderColor);
-	overflow: hidden; /* Hide potential VexFlow overflow */
-	position: relative; /* For potential absolute positioning inside */
+	background-color: #ff3b30 !important;
+	transform: scale(1.1);
 }

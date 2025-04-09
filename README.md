@@ -1,17 +1,36 @@
-# MIDIano - MIDI Player with Piano Roll and Sheet Music
+# MIDIano - MIDI Piano Visualizer
 
-MIDIano is a web-based MIDI player that visualizes MIDI files using an interactive piano roll and basic sheet music display. It allows users to load MIDI files, view the notes playing on a virtual keyboard and falling notes display, and see the corresponding musical notation.
+MIDIano is a JavaScript MIDI player/visualizer that shows MIDI notes on a piano and can also display sheet music notation.
 
 ## Features
 
-*   **MIDI Playback:** Loads and plays standard MIDI files (.mid).
-*   **Piano Roll Visualization:** Displays MIDI notes as falling blocks over a piano keyboard.
-*   **Sheet Music Display (Basic):** Renders basic musical notation for the loaded MIDI file using VexFlow.
-    *   Shows note pitches and calculated durations.
-    *   Highlights currently playing notes.
-*   **Interactive Controls:** Play, pause, stop, volume control, and track selection (basic).
-*   **SoundFont Support:** Uses SoundFonts (like Musyng Kite) for audio playback.
-*   **MIDI Input (Setup):** Includes setup for handling MIDI input devices (functionality may vary).
+- Piano visualization of MIDI files
+- Sheet music display synced with MIDI playback
+- MIDI keyboard input support
+- Audio playback with various soundfonts
+- Customizable visual settings
+
+## New Feature: Sheet Music Display
+
+MIDIano now includes sheet music visualization! The new features:
+
+- Real-time sheet music display that follows the MIDI playback
+- Synchronized highlighting of currently played notes
+- Toggle sheet music display on/off in settings
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Run `npm run build` to build the application
+4. Open `index.html` in your browser
+
+## Usage
+
+- Load a MIDI file using the interface
+- Toggle the sheet music display in the settings panel
+- Play/pause the MIDI playback
+- The piano and sheet music will visualize the notes as they play
 
 ## Technologies Used
 

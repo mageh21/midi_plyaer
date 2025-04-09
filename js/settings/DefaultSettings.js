@@ -49,7 +49,6 @@ const defaultSettings = {
 					)
 				}
 			},
-
 			{
 				type: "checkbox",
 				id: "showBPM",
@@ -192,7 +191,6 @@ const defaultSettings = {
 				value: true,
 				onChange: ev => setSetting("showHitKeys", ev.target.checked)
 			},
-
 			{
 				type: "checkbox",
 				id: "strokeActiveNotes",
@@ -248,14 +246,6 @@ const defaultSettings = {
 				value: true,
 				onChange: ev => setSetting("roundedNotes", ev.target.checked)
 			},
-			//TODO fix getAlphaFromY in Noterender.
-			// {
-			// 	type: "checkbox",
-			// 	id: "fadeInNotes",
-			// 	label: "Enable fade in effect",
-			// 	value: true,
-			// 	onChange: ev => setSetting("fadeInNotes", ev.target.checked)
-			// },
 			{
 				type: "slider",
 				id: "noteBorderRadius",
@@ -442,7 +432,7 @@ const defaultSettings = {
 				id: "soundfontName",
 				label: "Soundfont",
 				value: "MusyngKite",
-				list: ["MusyngKite", "FluidR3_GM", "FatBoy"],
+				list: ["MusyngKite", "FluidR3_GM", "FatBoy", "Tabla"],
 				onChange: newVal => setSetting("soundfontName", newVal)
 			},
 			{
@@ -458,7 +448,7 @@ const defaultSettings = {
 				type: "checkbox",
 				id: "enableMetronome",
 				label: "Enable Metronome",
-				value: true,
+				value: false,
 				onChange: function (ev) {
 					setSetting("enableMetronome", ev.target.checked)
 				}.bind(this)
@@ -467,7 +457,7 @@ const defaultSettings = {
 				type: "slider",
 				id: "metronomeVolume",
 				label: "Metronome Volume",
-				value: 0.5,
+				value: 0,
 				min: 0,
 				max: 1,
 				step: 0.1,

@@ -71,12 +71,23 @@
 	padding-top: 0;
 }
 .settingsGroupLabel {
-	font-size: 0.9em;
+	font-size: 1em;
 	font-weight: 600;
-	padding-left: 0.8em;
-	padding-bottom: 0.6em;
+	padding-left: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
 	color: var(--fontWeightedColor);
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	border-radius: 4px;
 }
+
+.settingsGroupLabel:hover {
+	background-color: var(--lightInnerMenuHoverBgColor);
+}
+
 .settingContainer {
 	padding: 0.8em 1em;
 	width: 100%;

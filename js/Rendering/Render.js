@@ -14,14 +14,13 @@ import { isBlack } from "../Util.js"
 import { getTrackColor, isTrackDrawn } from "../player/Tracks.js"
 import { getPlayerState } from "../player/Player.js"
 import { InSongTextRenderer } from "./InSongTextRenderer.js"
-import { SheetMusicRender } from "./SheetMusicRender.js"
 
 const DEBUG = true
 
 const DEFAULT_LOOK_BACK_TIME = 4
 const LOOK_AHEAD_TIME = 10
 
-const PROGRESS_BAR_CANVAS_HEIGHT = 20
+const PROGRESS_BAR_CANVAS_HEIGHT = 22
 
 /**
  * Class that handles all rendering
@@ -36,7 +35,6 @@ export class Render {
 		this.setupCanvases()
 
 		this.pianoRender = new PianoRender(this.renderDimensions)
-		this.sheetMusicRender = new SheetMusicRender("sheetMusicContainer")
 
 		this.overlayRender = new OverlayRender(this.ctx, this.renderDimensions)
 		// this.addStartingOverlayMessage()
@@ -77,8 +75,6 @@ export class Render {
 
 		this.showKeyNamesOnPianoWhite = getSetting("showKeyNamesOnPianoWhite")
 		this.showKeyNamesOnPianoBlack = getSetting("showKeyNamesOnPianoBlack")
-
-		this.sheetMusicRender.init()
 	}
 
 	setCtxBlur() {
@@ -158,12 +154,6 @@ export class Render {
 			)
 			this.markerRender.render(time, playerState.song.markers)
 			this.inSongTextRender.render(time, playerState.song.markers)
-
-			const sheetMusicTime = Math.max(0, time);
-			// Get current BPM and time signature
-			const bpm = playerState.song.getBPM(sheetMusicTime * 1000); // getBPM expects milliseconds
-			const timeSignature = playerState.song.timeSignature || { numerator: 4, denominator: 4 }; // Default if undefined
-			this.sheetMusicRender.render(playerState.song, sheetMusicTime, bpm, timeSignature);
 		}
 
 		this.overlayRender.render()
@@ -454,6 +444,5 @@ export class Render {
 	onResize() {
 		this.setupCanvases()
 		this.pianoRender.resize()
-		this.sheetMusicRender.resize(this.renderDimensions.windowWidth)
 	}
 }

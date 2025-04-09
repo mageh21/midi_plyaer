@@ -28,6 +28,5 @@
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
-    "vexflow": "^5.0.0"
   }
 }
