@@ -435,3 +435,15 @@ canvas {
 		transform: rotate(360deg);
 	}
 }
+
+/* --- Responsive Styles --- */
+@media (max-width: 768px) {
+	.innerMenuDiv {
+		width: 100%; /* Take full width on smaller screens */
+		min-width: unset; /* Remove the fixed min-width */
+		right: 0; /* Ensure it's positioned correctly */
+		/* Add other adjustments as needed, e.g., position, height */
+	}
+
+	/* Add other rules for small screens here */
+}
