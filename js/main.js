@@ -76,13 +76,15 @@ function renderLoop() {
 	window.requestAnimationFrame(renderLoop)
 }
 async function loadStartingSong() {
-	const domain = window.location.href
-	let url = "https://midiano.com/mz_331_3.mid?raw=true" // "https://bewelge.github.io/piano-midi.de-Files/midi/alb_esp1.mid?raw=true" //
-	if (domain.split("github").length > 1) {
-		url = "https://Bewelge.github.io/MIDIano/mz_331_3.mid?raw=true"
-	}
+	// const domain = window.location.href // Comment out domain check
+	// let url = "https://midiano.com/mz_331_3.mid?raw=true" // Comment out original URL
+	// if (domain.split("github").length > 1) { // Comment out github check
+	// 	url = "https://Bewelge.github.io/MIDIano/mz_331_3.mid?raw=true" // Comment out github URL
+	// }
+
+	let url = "sample.mid"; // Set URL to the local file
 
 	FileLoader.loadSongFromURL(url, (response, fileName) =>
-		getPlayer().loadSong(response, fileName, "Mozart - Turkish March")
+		getPlayer().loadSong(response, fileName, "Sample MIDI File") // Update song title
 	) // Local: "../mz_331_3.mid")
 }
