@@ -318,11 +318,17 @@ class Player {
 							getCurrentSong().measureLines[
 								Math.floor(beatTimestamp / 1000)
 							].includes(beatTimestamp)
-						this.playedBeats[beatTimestamp] = true
-						this.audioPlayer.playBeat(
+						// Safety check for metronome sound existence (assuming audioPlayer handles it internally or returns null/undefined if not ready)
+						const metronomeSound = this.audioPlayer.playBeat(
 							beatTimestamp / 1000 - currentTime,
 							newMeasure
-						)
+						);
+						if (!metronomeSound) { 
+							// Optionally log a warning if needed
+							// console.warn("Metronome sound not ready for beat:", beatTimestamp);
+						} else {
+							this.playedBeats[beatTimestamp] = true;
+						}
 					}
 				})
 			}
