@@ -442,18 +442,19 @@ canvas {
 /* --- Panel Close Button --- */
 .panel-close-button {
 	position: absolute;
-	top: 8px;
-	right: 10px;
-	background: none;
-	border: none;
-	font-size: 1.8em;
+	top: 5px; /* Adjust for potential parent padding */
+	right: 5px; /* Adjust for potential parent padding */
+	background: yellow !important; /* TEMP: Force visibility */
+	color: red !important; /* TEMP: Force visibility */
+	border: 1px solid red !important; /* TEMP: Force visibility */
+	font-size: 1.5em; /* Slightly smaller */
 	font-weight: bold;
-	color: var(--fontWeakenedColor);
 	cursor: pointer;
-	padding: 0 5px;
+	padding: 0 8px; /* More padding */
 	line-height: 1;
+	z-index: 101; /* Ensure it's above other panel content */
 	transition: color 0.15s ease-out;
 }
 .panel-close-button:hover {
-	color: var(--fontColor);
+	color: darkred !important; /* TEMP */
 }
