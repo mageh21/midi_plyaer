@@ -159,7 +159,11 @@ export class Render {
 			this.markerRender.render(time, playerState.song.markers)
 			this.inSongTextRender.render(time, playerState.song.markers)
 
-			this.sheetMusicRender.render(playerState.song)
+			const sheetMusicTime = Math.max(0, time);
+			// Get current BPM and time signature
+			const bpm = playerState.song.getBPM(sheetMusicTime * 1000); // getBPM expects milliseconds
+			const timeSignature = playerState.song.timeSignature || { numerator: 4, denominator: 4 }; // Default if undefined
+			this.sheetMusicRender.render(playerState.song, sheetMusicTime, bpm, timeSignature);
 		}
 
 		this.overlayRender.render()

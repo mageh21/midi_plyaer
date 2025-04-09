@@ -1,46 +1,70 @@
-# Midiano
+# MIDIano - MIDI Player with Piano Roll and Sheet Music
 
-## A JavaScript MIDI-Player/ Piano-learning webapp
+MIDIano is a web-based MIDI player that visualizes MIDI files using an interactive piano roll and basic sheet music display. It allows users to load MIDI files, view the notes playing on a virtual keyboard and falling notes display, and see the corresponding musical notation.
 
-### [Try out here](https://midiano.com/)
+## Features
 
-Midiano is a free Piano-learning webapp that runs on any device with a modern browser.
-Open any MIDI-File and Midiano shows you the notes as falling bars over a piano as well as the corresponding sheet music.
-Connect a MIDI-Keyboard to get instant feedback if you hit the correct notes.
-You can also use the keyboard as output device to play the MIDI-Files on your keyboard. 
+*   **MIDI Playback:** Loads and plays standard MIDI files (.mid).
+*   **Piano Roll Visualization:** Displays MIDI notes as falling blocks over a piano keyboard.
+*   **Sheet Music Display (Basic):** Renders basic musical notation for the loaded MIDI file using VexFlow.
+    *   Shows note pitches and calculated durations.
+    *   Highlights currently playing notes.
+*   **Interactive Controls:** Play, pause, stop, volume control, and track selection (basic).
+*   **SoundFont Support:** Uses SoundFonts (like Musyng Kite) for audio playback.
+*   **MIDI Input (Setup):** Includes setup for handling MIDI input devices (functionality may vary).
 
+## Technologies Used
 
+*   **JavaScript (ES6+ Modules):** Core application logic.
+*   **HTML5 Canvas:** For rendering the piano roll and sheet music.
+*   **VexFlow:** Library for rendering musical notation.
+*   **Node.js:** Required for the development environment and build process.
+*   **npm:** Package management.
+*   **Webpack:** Used to bundle JavaScript modules and CSS for the browser.
+*   **(Potentially others based on your `package.json`)**
 
+## Setup
 
-![Screenshot](/screenShotNew.png)
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/mageh21/midi_plyaer.git
+    cd midi_plyaer
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
+## Building
 
-I have continued development of Midiano in a private repository. This repository serves as a place for bug reports or feature requests.
+This project uses Webpack to bundle its assets. To build the project after making changes to the source files (like in the `js/` directory), run:
 
-I will keep the (outdated) code in this repository public though, in case someone is interested in looking at or tinkering with it. However please note that it is not open source.
+```bash
+npm run build
+```
 
-The current version of the app can be accessed at [Midiano.com](https://midiano.com/). 
+This will generate the necessary files (e.g., `dist/bundle.js`) in the `dist/` directory.
 
-#### Browser Support :
+## Running
 
-It runs on any browser (and device) that supports the <a href='https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API#browser_compatibility'>WebAudioAPI</a> (Full support apart from Internet Explorer). 
+After building the project, you can run it by opening the `index.html` file in your web browser.
 
-To connect a MIDI-Keyboard the browser also needs to support the <a href='https://developer.mozilla.org/en-US/docs/Web/API/MIDIAccess#browser_compatibility'>WebMIDIAPI</a> (Currently only Chrome and Edge).
+For the best experience and to avoid potential issues with file loading (like CORS), it's recommended to use a simple local web server:
 
+1.  **Using `npx` (no installation needed):**
+    ```bash
+    npx http-server .
+    ```
+2.  **Using Python's built-in server (if Python is installed):**
+    *   Python 3: `python -m http.server`
+    *   Python 2: `python -m SimpleHTTPServer`
 
-#### Features :
+Then, navigate to the local address provided by the server (usually `http://localhost:8080` or similar) in your browser.
 
-- MIDI playback 
-- MIDI-Keyboard support 
-  - Input  - Let the song wait for you to hit the correct notes
-  - Output - Use your MIDI-Keyboard as sound output
-- Automatic Sheet Music generation (Formatting & Rendering done with VexFlow)
-- Customize track colors, particle effects and track instruments
-- 3 different soundfonts from https://github.com/gleitz/midi-js-soundfonts
+## Contributing
 
-#### Libraries used:
+_(Optional: Add guidelines if you want others to contribute)_
 
-- pickr - Color Picker - https://github.com/Simonwep/pickr
-- jQuery
-- Bootstrap (only really use the glyphicons)
-- VexFlow for Sheet formatting & rendering.
+## License
+
+_(Optional: Add a license, e.g., MIT, Apache 2.0)_
