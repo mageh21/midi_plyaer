@@ -55,6 +55,8 @@ export class SheetMusicRender {
         // Alternative if getNotesInTimeWindow doesn't exist:
         // Iterate through songData.notesBySeconds or songData.getNoteSequence()
 
+        console.log(`[SheetMusic] Time: ${currentTime.toFixed(2)}, Notes in Window: ${notesInWindow.length}`); // DEBUG LOG
+
         notesInWindow.forEach(note => {
             const key = this.midiNoteToVexflowKey(note.noteNumber);
             if (key) {
@@ -76,6 +78,8 @@ export class SheetMusicRender {
             }
         });
 
+        console.log(`[SheetMusic] Notes to Draw: ${notesToDraw.length}`); // DEBUG LOG
+
         // --- Format and Draw --- 
         if (notesToDraw.length > 0) {
              try {
@@ -84,7 +88,8 @@ export class SheetMusicRender {
                 voice.setStrict(false); // Allow potentially overflowing measures for now
                 voice.addTickables(notesToDraw);
                 
-                this.vf.Formatter.FormatAndJustify([voice], this.stave.width - 50); // Leave some padding
+                // TEMP: Disable formatter for debugging - might draw notes overlapping
+                // this.vf.Formatter.FormatAndJustify([voice], this.stave.width - 50); 
                 
                 voice.draw(this.context, this.stave);
             } catch(e) {
