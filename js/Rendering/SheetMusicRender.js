@@ -8,7 +8,7 @@ export class SheetMusicRender {
     }
 
     init() {
-        // No-op function
+        // Silently handle missing container - no warnings needed
         return;
     }
 

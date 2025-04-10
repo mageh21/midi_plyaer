@@ -11,8 +11,10 @@ export class PianoRender {
 		this.renderDimensions.registerResizeCallback(this.resize.bind(this))
 		this.clickCallback = null
 		this.blackKeyImg = new Image()
-		this.blackKeyImg.src = "../../blackKey.svg"
-		this.blackKeyImg.onload
+		this.blackKeyImg.src = "./blackKey.svg"
+		this.blackKeyImg.onerror = () => {
+			console.log("Failed to load blackKey.svg, using fallback rendering")
+		}
 		this.positionY = 50 //from bottom
 
 		this.resize()

@@ -458,7 +458,7 @@ const defaultSettings = {
 				type: "checkbox",
 				id: "enableMetronome",
 				label: "Enable Metronome",
-				value: true,
+				value: false,
 				onChange: function (ev) {
 					setSetting("enableMetronome", ev.target.checked)
 				}.bind(this)

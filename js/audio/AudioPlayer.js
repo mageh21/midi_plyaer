@@ -105,26 +105,34 @@ export class AudioPlayer {
 		let audioPl = this
 
 		const request = new XMLHttpRequest()
-		request.open("GET", "../../metronome/1.wav")
+		request.open("GET", "./metronome/1.wav")
 		request.responseType = "arraybuffer"
 		request.onload = function () {
 			let undecodedAudio = request.response
 			audioPl.context.decodeAudioData(
 				undecodedAudio,
-				data => (audioPl.metronomSound1 = data)
+				data => (audioPl.metronomSound1 = data),
+				error => console.log("Error decoding metronome sound 1:", error)
 			)
+		}
+		request.onerror = function(error) {
+			console.log("Error loading metronome sound 1:", error)
 		}
 		request.send()
 
 		const request2 = new XMLHttpRequest()
-		request2.open("GET", "../../metronome/2.wav")
+		request2.open("GET", "./metronome/2.wav")
 		request2.responseType = "arraybuffer"
 		request2.onload = function () {
 			let undecodedAudio = request2.response
 			audioPl.context.decodeAudioData(
 				undecodedAudio,
-				data => (audioPl.metronomSound2 = data)
+				data => (audioPl.metronomSound2 = data),
+				error => console.log("Error decoding metronome sound 2:", error)
 			)
+		}
+		request2.onerror = function(error) {
+			console.log("Error loading metronome sound 2:", error)
 		}
 		request2.send()
 	}
